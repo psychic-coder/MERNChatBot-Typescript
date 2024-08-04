@@ -15,7 +15,7 @@ This project is a modern AI chatbot built using the MERN (MongoDB, Express, Reac
 - **Frontend**: React with TypeScript
 - **Backend**: Node.js and Express with TypeScript
 - **Database**: MongoDB
-- **AI Integration**: [Your chosen AI library/API]
+- **AI Integration**:This will be decided later
 
 ## Prerequisites
 
