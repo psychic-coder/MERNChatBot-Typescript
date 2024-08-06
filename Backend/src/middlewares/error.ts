@@ -1,7 +1,7 @@
 
 import { NextFunction, Request, Response } from "express";
 import ErrorHandler from "../utils/errorHandler.js";
-import { envMode } from "../app.js";
+import { envMode } from "../index.js";
 
 export const errorMiddleware = (err:ErrorHandler, req:Request, res:Response, next:NextFunction)=> {
 

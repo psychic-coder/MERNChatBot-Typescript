@@ -1,38 +1,25 @@
-import express from 'express'
-import cors from 'cors'
-import {errorMiddleware} from './middlewares/error.js'
-import dotenv from 'dotenv'
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { errorMiddleware } from './middlewares/error.js';
+import morgan from "morgan";
+import appRouter from './routes/index.js';
 
 
-  dotenv.config({path: './.env',});
+dotenv.config({ path: './.env' });
 
-  export const envMode = process.env.NODE_ENV?.trim() || 'DEVELOPMENT';
-  const port = process.env.PORT || 3000;
+const app = express();
 
+// Middleware setup
+app.use(cors()); // Enable CORS if needed
+app.use(express.json()); // Parse JSON bodies
+app.use(express.urlencoded({ extended: true })); 
 
-  const app = express();
+//TODO:REMOVE MORGAN BEFORE DEPLOYING ON PRODUCTION
+app.use(morgan("dev"));
 
+// Error handling middleware should be added after all routes
+app.use(errorMiddleware);
+app.use("/api/v1",appRouter);
 
- app.use(express.json());
-app.use(express.urlencoded({extended: true}));
-app.use(cors({origin:' * ',credentials:true})); 
-
-
-  app.get('/', (req, res) => {
-    res.send('Hello, World!');
-  });
-
-  // your routes here
-
-  
-  app.get("*", (req, res) => {
-    res.status(404).json({
-      success: false,
-      message: 'Page not found'
-    });
-  });
-
-  app.use(errorMiddleware);
-  
-  
-  app.listen(port, () => console.log('Server is working on Port:'+port+' in '+envMode+' Mode.'));
+export default app;
