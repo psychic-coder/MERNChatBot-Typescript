@@ -18,8 +18,11 @@ app.use(express.urlencoded({ extended: true }));
 //TODO:REMOVE MORGAN BEFORE DEPLOYING ON PRODUCTION
 app.use(morgan("dev"));
 
-// Error handling middleware should be added after all routes
-app.use(errorMiddleware);
+
 app.use("/api/v1",appRouter);
+
+
+
+
 
 export default app;
