@@ -1,6 +1,7 @@
 import mongoose, { connect, disconnect } from "mongoose";
 
-const mongoDbUrl: string = process.env.MONGODB_URI as string;
+const mongoDbUrl: string = process.env.MONGODB_URI as string || "mongodb+srv://rohitganguly450:syfgXgtI0CFPKEDp@cluster0.rieijoq.mongodb.net/chatbot?retryWrites=true&w=majority&appName=Cluster0";
+
 
   async function connectToDatabase(){
     try {

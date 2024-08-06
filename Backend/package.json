@@ -27,6 +27,7 @@
           "openai": "^4.54.0"
      },
      "devDependencies": {
+          "@types/cookie-parser": "^1.4.7",
           "@types/cors": "2.8.17",
           "@types/express": "4.17.21",
           "@types/morgan": "^1.9.9",
