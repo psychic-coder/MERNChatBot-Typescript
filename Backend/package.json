@@ -6,7 +6,8 @@
      "scripts": {
           "start": "set NODE_ENV=PRODUCTION & node dist/index.js",
           "build": "npx tsc -p .",
-          "dev": "npx nodemon dist/index.js",
+          "dev": "concurrently \"npm:watch\" \"npm:serve\"",
+          "serve": "nodemon dist/index.js",
           "watch": "npx tsc -w"
      },
      "keywords": [],
