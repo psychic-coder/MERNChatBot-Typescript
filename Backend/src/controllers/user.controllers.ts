@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../models/User.js";
 import bcryptjs from "bcryptjs";
+import { createToken } from "../utils/token-manager.js";
+import { COOKIE_NAME } from "../utils/constants.js";
 
 //
 export const getAllUsers = async (
@@ -43,7 +45,31 @@ export const userSignUp = async (
     const hashedPassword = bcryptjs.hashSync(password, 10);
     const user = new User({ name, email, password: hashedPassword });
     await user.save();
-    return res.status(201).json({ message: "OK", id: user._id.toString() });
+
+
+
+    //the below is the code for cookie and token
+    res.clearCookie(COOKIE_NAME,{
+      path: "/",
+      domain: "localhost",
+      httpOnly: true,
+      signed:true,
+    });
+
+    const token = createToken(user._id.toString(), user.email, "7d");
+
+    const expires = new Date();
+    expires.setDate(expires.getDate() + 7);
+    // TODO:Change the domain before hosting the website
+    // the cookie will expire after 7 days , after creation
+    res.cookie(COOKIE_NAME, token, {
+      path: "/",
+      domain: "localhost",
+      expires,
+      httpOnly: true,
+      signed:true,
+    });
+    return res.status(200).json({ message: "OK", id: user._id.toString() });
   } catch (error) {
     return res.status(200).json({
       message: "Error",
@@ -72,6 +98,26 @@ export const userLogin = async (
       return res.status(403).send("Incorrect Password ");
     }
 
+    res.clearCookie(COOKIE_NAME,{
+      path: "/",
+      domain: "localhost",
+      httpOnly: true,
+      signed:true,
+    });
+
+    const token = createToken(user._id.toString(), user.email, "7d");
+
+    const expires = new Date();
+    expires.setDate(expires.getDate() + 7);
+    // TODO:Change the domain before hosting the website
+    // the cookie will expire after 7 days , after creation
+    res.cookie(COOKIE_NAME, token, {
+      path: "/",
+      domain: "localhost",
+      expires,
+      httpOnly: true,
+      signed:true,
+    });
     return res.status(200).json({ message: "OK", id: user._id.toString() });
   } catch (error) {
     return res.status(200).json({
