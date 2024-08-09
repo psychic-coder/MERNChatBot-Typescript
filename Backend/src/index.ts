@@ -21,7 +21,7 @@ connectToDatabase()
   });
 
 // Middleware setup
-app.use(cors()); // Enable CORS if needed
+app.use(cors({ origin: "http://localhost:5173", credentials: true })); // Enable CORS if needed
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
