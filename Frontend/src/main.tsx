@@ -9,7 +9,7 @@ import axios from "axios";
 
 
 
-axios.defaults.baseURL="http://localhost:5000/api/v1";
+axios.defaults.baseURL="http://localhost:4000/api/v1";
 axios.defaults.withCredentials = true; // this is used to get the cookies stored in the backend 
 const theme = createTheme({
   typography: {
