@@ -1,12 +1,37 @@
 import { Box, Button, Typography } from "@mui/material";
 import { IoIosLogIn } from "react-icons/io";
 import CustomizedInput from "../components/shared/CustomizedInput";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useEffect } from "react";
 
 const Login = () => {
 
-  const handleSubmit=()=>{
+  const navigate = useNavigate();
+  const auth = useAuth();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    try {
+      toast.loading("Signing In", { id: "login" });
+      await auth?.login(email, password);
+      toast.success("Signed In Successfully", { id: "login" });
+    } catch (error) {
+      console.log(error);
+      toast.error("Signing In Failed", { id: "login" });
+    }
+  };
+  useEffect(() => {
+    if (auth?.user) {
+      return navigate("/chat");
+    }
+  }, [auth]);
 
-  }
+
+
   return (
     <Box width={"100%"} height={"100%"} display="flex" flex={1}>
       <Box padding={8} mt={8} display={{ md: "flex", sm: "none" }}>
