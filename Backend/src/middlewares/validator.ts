@@ -45,4 +45,10 @@ const loginValidator = [
     .withMessage("Password should contain atleast 6 characters"),
 ];
 
-export { validate, signUpValidator , loginValidator };
+
+const chatCompletionValidator = [
+  body("message").notEmpty().withMessage("Message is required"),
+  
+];
+
+export { validate, signUpValidator , loginValidator ,chatCompletionValidator};

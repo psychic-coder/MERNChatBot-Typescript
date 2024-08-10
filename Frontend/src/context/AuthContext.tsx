@@ -31,6 +31,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // fetch if the user's cookies are valid then skip login
+    //we're sending the cookies fromm the backend and checking in here if its present or not , and if its there then we're just gonna skip login
     async function checkStatus() {
       const data = await checkAuthStatus();
       if (data) {
