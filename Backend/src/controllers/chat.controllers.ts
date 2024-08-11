@@ -9,7 +9,10 @@ export const generateChatCompletion = async (
   next: NextFunction
 ) => {
   try {
-    const openai = new OpenAI();
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY!, // Use your environment variable or hardcode the API key here
+      organization: process.env.OPENAI_ORGANIZATION_ID!
+    });
 
     const { message } = req.body;
     const user = await User.findById(res.locals.jwtData.id);
