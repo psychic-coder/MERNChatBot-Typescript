@@ -11,7 +11,8 @@ import {
   sendChatRequest,
 } from "../helpers/api-communicator";
 import toast from "react-hot-toast";
-import ChatItem from "../components/chat/chatItem";
+import ChatItem from "../components/chat/ChatItem";
+
 type Message = {
   role: "user" | "assistant";
   content: string;
