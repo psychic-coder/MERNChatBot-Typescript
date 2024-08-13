@@ -77,6 +77,8 @@ export const userSignUp = async (
     });
   }
 };
+
+
 export const userLogin = async (
   req: Request,
   res: Response,
@@ -145,7 +147,7 @@ export const verifyUser = async (
       .json({ message: "OK", name: user.name, email: user.email });
   } catch (error) {
     console.log(error);
-    return res.status(200).json({ message: "ERROR", cause: "Error in the verifyUser" });
+    return res.status(404).json({ message: "ERROR", cause: "Error in the verifyUser" });
   }
 };
 
