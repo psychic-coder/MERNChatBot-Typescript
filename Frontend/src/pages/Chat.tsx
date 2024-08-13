@@ -43,6 +43,8 @@ const Chat = () => {
       toast.error("Deleting chats failed", { id: "deletechats" });
     }
   };
+
+  //its synchronous 
   useLayoutEffect(() => {
     if (auth?.isLoggedIn && auth.user) {
       toast.loading("Loading Chats", { id: "loadchats" });
@@ -57,11 +59,15 @@ const Chat = () => {
         });
     }
   }, [auth]);
+
+
   useEffect(() => {
     if (!auth?.user) {
       return navigate("/login");
     }
   }, [auth]);
+
+
   return (
     <Box
       sx={{
