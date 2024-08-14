@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 import { Request, Response, NextFunction } from "express";
 import User from "../models/User.js";
-import MistralClient from '@mistralai/mistralai';
+import MistralClient, { Mistral } from '@mistralai/mistralai';
 
 
 
@@ -9,21 +9,17 @@ import MistralClient from '@mistralai/mistralai';
 
  // Assuming you have a User model in the models directory
 
-export const generateChatCompletion = async (
+ export const generateChatCompletion = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-
-// const apiKey = process.env.MISTRAL_API_KEY;
-// const client = new MistralClient(apiKey);
-
-
   try {
-    const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY!, // Use your environment variable or hardcode the API key here
-      organization: process.env.OPENAI_ORGANIZATION_ID!
-    });
+    // const apiKey = process.env.MISTRAL_API_KEY || 'your_api_key';
+    const client = new Mistral({
+      apiKey: process.env.MISTRAL_API_KEY ?? "",
+  });
+  
 
     const { message } = req.body;
     const user = await User.findById(res.locals.jwtData.id);
@@ -33,32 +29,40 @@ export const generateChatCompletion = async (
         .json({ message: "User not registered OR Token malfunctioned" });
     }
 
-    // Explicitly typing role and content for each chat message
     const chats: Array<{ role: "user" | "assistant" | "system"; content: string }> = user.chats.map(({ role, content }) => ({
-      role: role as "user" | "assistant" | "system", // Explicitly asserting type
+      role: role as "user" | "assistant" | "system",
       content,
     }));
 
     chats.push({ content: message, role: "user" });
     user.chats.push({ content: message, role: "user" });
 
-    // send all chats with new one to OpenAI API
-    const chatResponse = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+    // send all chats with the new one to Mistral API
+    const chatResponse = await client.chat.complete({
+      model: 'mistral-tiny',
       messages: chats,
     });
 
     // save response
-    const aiMessage = chatResponse.choices[0].message;
-    user.chats.push(aiMessage);
-    await user.save();
+    if (chatResponse?.choices && chatResponse.choices.length > 0) {
+      const aiMessage = chatResponse.choices[0].message;
+      
+      if (aiMessage) {
+        user.chats.push(aiMessage);
+        await user.save();
 
-    return res.status(200).json({ chats: user.chats });
+        return res.status(200).json({ chats: user.chats });
+      } else {
+        return res.status(500).json({ message: "AI message is undefined" });
+      }
+    } else {
+      return res.status(500).json({ message: "No response from Mistral AI" });
+    }
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Something went wrong" });
   }
-};
+  }
 
 
 export const sendChatsToUser = async (
