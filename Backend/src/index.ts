@@ -28,7 +28,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(morgan("dev"));
 
 // Routes setup
-app.use("/api/v1", appRouter);
+app.use("/api/v1", appRouter)
 
 
 
