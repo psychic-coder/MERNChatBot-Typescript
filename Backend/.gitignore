@@ -19,8 +19,7 @@ Thumbs.db
 coverage/
 
 # Build output
-dist/
-build/
+
 
 # IDE files
 .vscode/
