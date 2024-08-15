@@ -1,5 +1,5 @@
 import { connectToDatabase, disconnectFromDatabase } from "./db/connection.js";
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import morgan from "morgan";
@@ -29,7 +29,19 @@ app.use(morgan("dev"));
 
 // Routes setup
 app.use("/api/v1", appRouter)
+app.get("/", (req: Request, res: Response, next: NextFunction) => {
+  try {
+    res.status(200).send("Backend is working");
+  } catch (error) {
+    next(error);
+  }
+});
 
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error(err.stack);
+  res.status(500).send("Something went wrong!");
+});
 
 
 

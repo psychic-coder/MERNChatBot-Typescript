@@ -25,6 +25,18 @@ app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(morgan("dev"));
 // Routes setup
 app.use("/api/v1", appRouter);
+app.get("/", (req, res, next) => {
+    try {
+        res.status(200).send("Backend is working");
+    }
+    catch (error) {
+        next(error);
+    }
+});
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send("Something went wrong!");
+});
 // Wildcard route should be placed after all other routes and middlewares
 app.get("*", (req, res) => {
     res.status(404).json({
