@@ -18,15 +18,18 @@ import {
   sendChatRequest,
 } from "../helpers/api-communicator";
 import toast from "react-hot-toast";
+
 type Message = {
   role: "user" | "assistant";
   content: string;
 };
+
 const Chat = () => {
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const auth = useAuth();
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
+
   const handleSubmit = async () => {
     const content = inputRef.current?.value as string;
     if (inputRef && inputRef.current) {
@@ -34,10 +37,20 @@ const Chat = () => {
     }
     const newMessage: Message = { role: "user", content };
     setChatMessages((prev) => [...prev, newMessage]);
-    const chatData = await sendChatRequest(content);
-    setChatMessages([...chatData.chats]);
-    //
+
+    try {
+      const chatData = await sendChatRequest(content);
+      // Ensure chatData.chats is an array before setting state
+      if (Array.isArray(chatData.chats)) {
+        setChatMessages([...chatData.chats]);
+      } else {
+        console.error("Expected chatData.chats to be an array");
+      }
+    } catch (error) {
+      console.error("Error sending chat request:", error);
+    }
   };
+
   const handleDeleteChats = async () => {
     try {
       toast.loading("Deleting Chats", { id: "deletechats" });
@@ -49,13 +62,20 @@ const Chat = () => {
       toast.error("Deleting chats failed", { id: "deletechats" });
     }
   };
+
   useLayoutEffect(() => {
     if (auth?.isLoggedIn && auth.user) {
       toast.loading("Loading Chats", { id: "loadchats" });
       getUserChats()
         .then((data) => {
-          setChatMessages([...data.chats]);
-          toast.success("Successfully loaded chats", { id: "loadchats" });
+          // Ensure data.chats is an array before setting state
+          if (Array.isArray(data.chats)) {
+            setChatMessages([...data.chats]);
+            toast.success("Successfully loaded chats", { id: "loadchats" });
+          } else {
+            console.error("Expected data.chats to be an array");
+            toast.error("Loading Failed", { id: "loadchats" });
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -63,11 +83,13 @@ const Chat = () => {
         });
     }
   }, [auth]);
+
   useEffect(() => {
     if (!auth?.user) {
       return navigate("/login");
     }
   }, [auth]);
+
   return (
     <Box
       sx={{

@@ -9,8 +9,8 @@ import axios from "axios";
 
 
 
-axios.defaults.baseURL=import.meta.env.BASE_URL;
-axios.defaults.withCredentials = true; // this is used to get the cookies stored in the backend 
+axios.defaults.baseURL=import.meta.env.BASE_URL || "http://localhost:4000/api/v1" ; 
+axios.defaults.withCredentials = true; // this is used to get the cookies store d in the backend 
 const theme = createTheme({
   typography: {
     fontFamily: "Roboto slab,serif",
