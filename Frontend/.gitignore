@@ -7,10 +7,21 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependency directories
 node_modules
+bower_components
+
+# Build output directories
 dist
-dist-ssr
+build
+out
+coverage
 *.local
+
+# Environment files
+.env
+.env.local
+.env.*.local
 
 # Editor directories and files
 .vscode/*
@@ -22,3 +33,36 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+*.code-workspace
+
+# Operating system files
+Thumbs.db
+ehthumbs.db
+
+# Miscellaneous
+*.pid
+*.seed
+*.log
+*.gz
+*.zip
+
+# Docker
+docker-compose.override.yml
+Dockerfile.local
+
+# Prisma
+prisma/migrations/*
+prisma/dev.db
+
+# Next.js
+.next
+out
+*.next
+
+# Build directories for various frameworks
+public
+*.css
+
+# Generated files
+*.tsbuildinfo
+*.d.ts
